@@ -105,9 +105,13 @@ def get_song_info(access_token):
 def shutdown_computer(seconds):
     """Schedules a shutdown command for Windows."""
     # This command works from both standard Windows CMD and WSL
-    # Using /t 0 for immediate shutdown without countdown notification
-    os.system(f"shutdown.exe /s /f /t 0")
+
     print(f"Success! Windows will shut down immediately (song had {seconds} seconds remaining).")
+
+    sleep(seconds)
+    
+    os.system(f"shutdown.exe /s /f /t 0")
+    
     print("Note: Immediate shutdown - no countdown notification will appear.")
 
 def main():
