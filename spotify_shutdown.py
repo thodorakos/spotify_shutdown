@@ -106,13 +106,13 @@ def shutdown_computer(seconds):
     """Schedules a shutdown command for Windows."""
     # This command works from both standard Windows CMD and WSL
 
-    print(f"Success! Windows will shut down immediately (song had {seconds} seconds remaining).")
+    print(f"Windows will shut down in {seconds} seconds .")
 
-    sleep(seconds)
-    
+    time.sleep(seconds - 0.5)
+
     os.system(f"shutdown.exe /s /f /t 0")
     
-    print("Note: Immediate shutdown - no countdown notification will appear.")
+    
 
 def main():
     access_token = get_access_token_from_refresh_token()
