@@ -108,7 +108,7 @@ def shutdown_computer(seconds):
 
     print(f"Windows will shut down in {seconds} seconds .")
 
-    time.sleep(seconds - 1.5)
+    time.sleep(seconds - 1.75)
 
     os.system(f"shutdown.exe /s /f /t 0")
     
