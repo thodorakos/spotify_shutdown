@@ -106,9 +106,37 @@ def shutdown_computer(seconds):
     """Schedules a shutdown command for Windows."""
     # This command works from both standard Windows CMD and WSL
 
-    print(f"Windows will shut down in {seconds} seconds .")
+    print(f"Windows will shut down in {seconds} seconds.")
 
-    time.sleep(seconds - 1.75)
+    target_duration = max(0, seconds - 1.75)
+    start_time = time.time()
+
+    try:
+        while True:
+            elapsed = time.time() - start_time
+            remaining = target_duration - elapsed
+
+            if remaining <= 0:
+                break
+
+            # Progress bar calculation
+            percent = min(1.0, elapsed / target_duration) if target_duration > 0 else 1.0
+            bar_length = 30
+            filled_length = int(bar_length * percent)
+            bar = '=' * filled_length + '-' * (bar_length - filled_length)
+
+            # Display the bar and remaining time
+            sys.stdout.write(f"\r[{bar}] {remaining:.1f}s remaining")
+            sys.stdout.flush()
+            
+            time.sleep(0.1)
+            
+        sys.stdout.write(f"\r[{'=' * 30}] 0.0s remaining\n")
+        sys.stdout.flush()
+
+    except KeyboardInterrupt:
+        print("\nShutdown cancelled by user.")
+        sys.exit(0)
 
     os.system(f"shutdown.exe /s /f /t 0")
     
