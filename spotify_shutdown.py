@@ -102,12 +102,7 @@ def get_song_info(access_token):
         print(response.json())
         return None
 
-def shutdown_computer(seconds):
-    """Schedules a shutdown command for Windows."""
-    # This command works from both standard Windows CMD and WSL
-
-    print(f"Windows will shut down in {seconds} seconds.")
-
+def display_shutdown_countdown(seconds):
     target_duration = max(0, seconds - 2)
     start_time = time.time()
 
@@ -120,8 +115,16 @@ def shutdown_computer(seconds):
                 break
 
             # Progress bar calculation
+            try:
+                columns = os.get_terminal_size().columns
+            except OSError:
+                columns = 80
+
             percent = min(1.0, elapsed / target_duration) if target_duration > 0 else 1.0
-            bar_length = 30
+            
+            # Reserve space for "[] 123.4s remaining" -> approx 20-25 chars
+            bar_length = max(10, columns - 25)
+            
             filled_length = int(bar_length * percent)
             bar = '=' * filled_length + '-' * (bar_length - filled_length)
 
@@ -131,12 +134,26 @@ def shutdown_computer(seconds):
             
             time.sleep(0.1)
             
-        sys.stdout.write(f"\r[{'=' * 30}] 0.0s remaining\n")
+        # Final full bar
+        try:
+            columns = os.get_terminal_size().columns
+        except OSError:
+            columns = 80
+        bar_length = max(10, columns - 25)
+        sys.stdout.write(f"\r[{'=' * bar_length}] 0.0s remaining\n")
         sys.stdout.flush()
 
     except KeyboardInterrupt:
         print("\nShutdown cancelled by user.")
         sys.exit(0)
+
+def shutdown_computer(seconds):
+    """Schedules a shutdown command for Windows."""
+    # This command works from both standard Windows CMD and WSL
+
+    print(f"Windows will shut down in {seconds} seconds.")
+
+    display_shutdown_countdown(seconds)
 
     os.system(f"shutdown.exe /s /f /t 0")
     
