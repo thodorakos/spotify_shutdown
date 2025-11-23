@@ -108,7 +108,7 @@ def shutdown_computer(seconds):
 
     print(f"Windows will shut down in {seconds} seconds.")
 
-    target_duration = max(0, seconds - 1.75)
+    target_duration = max(0, seconds - 2)
     start_time = time.time()
 
     try:
