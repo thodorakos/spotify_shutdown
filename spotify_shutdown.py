@@ -168,7 +168,7 @@ def main():
         if not access_token:
             print("\nSetup failed. Please check your credentials and authorization code.")
             sys.exit(1) # Exit the script
-        print("Please paste the refresh token into the script and run it again.")
+        print("Set SPOTIFY_REFRESH_TOKEN in your environment and run it again.")
         sys.exit(0)
 
 
